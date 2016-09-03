@@ -9,7 +9,7 @@
 title: jisonami
 brief-intro: A Java Dev Engineer
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://gaohaoyang.github.io" # the base hostname & protocol for your site
+url: "https://jisonami.org" # the base hostname & protocol for your site
 
 permalink: /:year/:month/:day/:title/
 
@@ -23,7 +23,7 @@ zhihu_username: jisonami
 linkedIn_username: jisonami
 dribbble_username:
 
-description_footer: 本站记录我在程序开发过程中的感悟！
+description_footer: 本站记录我在程序开发过程中的学习笔记！
 
 # comments
 # two ways to comment, only choose one, and use your own short name
