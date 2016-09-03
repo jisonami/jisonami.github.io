@@ -389,36 +389,43 @@ map.replaceAll((k, v) -> v.replaceAll("value", "element"));
 ![HashMapForEach](/images/Core_Java/JavaCollection2/HashMapForEach.png)
 
 
-#### Map接口其余的默认方法 
-
+#### Map接口其余的默认方
 以下几个方法均是对value取值和设置的方法 
 
+
 * 若key值对应的value为null，则返回defaultValue 
+
 ```java
 V getOrDefault(Object key, V defaultValue)
 ```
 
 * 若key值对应为value为null，设值为value，否则不操作 
+
 ```java
 V putIfAbsent(K key, V value)  
 ```
 
 * 若key值对应的value为null，根据mappingFunction计算的值设值，否则不操作 
+
 ```java
 V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction)
 ```
 
 * 若key值对应的value不为空，根据remappingFunction计算的值设值，否则不操作 
+
 ```java
 V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction)
 ```
 
 * 根据remappingFunction计算的值对key对应的value设值，若计算的值为null，则删除key-value键值对 
+
 ```java
 V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction)  
 ```
 
 * 若key对应的value为null，则直接将第二个参数value对key对应的value设值。若key对应的value不为null，根据remappingFunction计算的值对key对应的value设值。若计算的值为null，则删除key-value键值对。 
+
+
 ```java
 V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction)  
 ```
