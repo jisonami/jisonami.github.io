@@ -14,11 +14,11 @@ url: "https://jisonami.org" # the base hostname & protocol for your site
 permalink: /:year/:month/:day/:title/
 
 # other links
-twitter_username: #gaohaoyang126
-facebook_username: #gaohaoyang.water
+twitter_username:
+facebook_username:
 github_username:  jisonami
 email: jisonami@163.com
-weibo_username: #3115521wh
+weibo_username:
 zhihu_username: jisonami
 linkedIn_username: jisonami
 dribbble_username:
