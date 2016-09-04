@@ -57,21 +57,25 @@ yum install ruby ruby-devel
 淘宝的镜像[https://ruby.taobao.org](https://ruby.taobao.org)已经不维护了，现在维护的ruby镜像是[http://gems.ruby-china.org/](http://gems.ruby-china.org/)
 
 删除默认的官方源
+
 ```
 gem sources -r https://rubygems.org/
 ```
 
 添加ruby-china源
+
 ```
 gem sources -a http://gems.ruby-china.org/
 ```
 
 查看当前源
+
 ```
 gem sources -l
 ```
 
 注意看到添加ruby-china远时用的是http协议，为什么不用https协议呢？因为在windows下会以下错误
+
 ```
 ERROR:  While executing gem ... (Gem::RemoteFetcher::FetchError)
     SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (https://gems.ruby-china.org/specs.4.8.gz)
@@ -79,11 +83,13 @@ ERROR:  While executing gem ... (Gem::RemoteFetcher::FetchError)
 
 
 ### 安装jekyll
+
 ```
 gem install jekyll
 ```
 
 如果是centos7安装jekyll的话，可能会报一下错误
+
 ```
 Building native extensions.  This could take a while...
 ERROR:  Error installing jekyll:
@@ -96,11 +102,13 @@ libraries and/or headers.  Check the mkmf.log file for more details.  You may
 need configuration options.
 ```
 这是由于缺少gcc、g++依赖造成的，安装一下就好
+
 ```
 yum install gcc g++
 ```
 
 然后跟着jekyll官方的教程运行jekyll serve的时候会报一下错误
+
 ```
 /usr/share/rubygems/rubygems/core_ext/kernel_require.rb:55:in `require': cannot load such file -- bundler (LoadError)
         from /usr/share/rubygems/rubygems/core_ext/kernel_require.rb:55:in `require'
@@ -113,16 +121,19 @@ yum install gcc g++
 这是因为jekyll new新建的jekyll项目里面有个Gemfile文件，这个文件是ruby中bundle管理gem依赖包的方式，所以我们还需要安装bundle
 
 ### 安装bundle
+
 ```
 gem install bundle
 ```
 
 同样配置bundle的镜像源为ruby-china
+
 ```
 bundle config mirror.https://rubygems.org http://gems.ruby-china.org/
 ```
 
 ### 安装Gemfile依赖
+
 ```
 cd jekyllprojectdir
 bundle install
@@ -139,6 +150,7 @@ bundle install
 知乎有个帖子是关于jekyll主题讨论的，我博客这个主题也是在这个帖子里面找到的[有哪些简洁明快的 Jekyll 模板？](http://www.zhihu.com/question/20223939)
 
 有些jekyll主题是有别的依赖的，比如我博客这个主题就会报这个错
+
 ```
 D:\>cd D:\SDK\Ruby\gaohaoyang.github.io-master
 
@@ -149,6 +161,7 @@ jekyll 3.2.1 | Error:  jekyll-paginate
 ```
 
 解决办法：
+
 ```shell
 gem install jekyll-paginate
 ```
