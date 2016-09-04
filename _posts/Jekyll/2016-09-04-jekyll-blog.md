@@ -157,4 +157,6 @@ gem install jekyll-paginate
 
 这个比较简单，与Github Pages服务类似，先push代码
 
-不过[Coding Pages服务](https://coding.net/help/doc/pages/index.html)提供了图形化的操作界面，并且每个项目的每个分支都能使用该服务
+不过Github Pages服务只能是使用username.github.io这一个项目作为静态网站运行
+
+而[Coding Pages服务](https://coding.net/help/doc/pages/index.html)提供了图形化的操作界面，并且每个项目的每个分支都能使用该服务
