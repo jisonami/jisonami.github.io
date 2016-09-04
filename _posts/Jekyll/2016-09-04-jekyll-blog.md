@@ -159,4 +159,8 @@ gem install jekyll-paginate
 
 不过Github Pages服务只能是使用username.github.io这一个项目作为静态网站运行
 
+所以我在Github Pages服务托管的博客就是[jisonami.github.io](jisonami.github.io)
+
 而[Coding Pages服务](https://coding.net/help/doc/pages/index.html)提供了图形化的操作界面，并且每个项目的每个分支都能使用该服务
+
+而在Coding Pages服务托管的博客使用了独立域名[jisonami.org](jisonami.org)
