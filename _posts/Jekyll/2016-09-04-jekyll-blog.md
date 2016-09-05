@@ -37,12 +37,13 @@ tags: Jekyll Ruby gem bundle
 
 ### 安装ruby
 
-* centos7安装ruby
-```shell
+#### centos7安装ruby
+
+```
 yum install ruby ruby-devel
 ```
 
-* windows安装ruby
+#### windows安装ruby
 
 下载[rubyinstaller](http://rubyinstaller.org/)
 
@@ -162,7 +163,7 @@ jekyll 3.2.1 | Error:  jekyll-paginate
 
 解决办法：
 
-```shell
+```
 gem install jekyll-paginate
 ```
 
