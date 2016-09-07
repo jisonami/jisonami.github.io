@@ -51,7 +51,7 @@ public class ThreadTest extends Thread{
 
 代码执行结果为：
 
-![ExtendsThreadClass.png](/images/Core_Java/JavaThread1/ExtendsThreadClass.png)
+![ExtendsThreadClass.png](/images/Core_Java/JavaThread1/ExtendsThread.png)
 
 从执行结果中可以看出，线程的执行是异步的，并不是顺序执行的。这就是以继承Thread类的方式创建线程。
 
@@ -96,7 +96,7 @@ public class RunnableTest implements Runnable{
 
 代码执行结果为：
 
-![ImplementsRunnableInterface.png](/images/Core_Java/JavaThread1/ImplementsRunnableInterface.png)
+![ImplementsRunnableInterface.png](/images/Core_Java/JavaThread1/ImplementsRunnable.png)
  
 前面说到Runnable是函数式接口，可以使用lambda表达式简化代码，以下代码执行结果同上。
 
@@ -192,7 +192,7 @@ public class CallableTest implements Callable<Integer>{
 
 代码执行结果为：
 
- ![ImplementsCallableInterface.png](/images/Core_Java/JavaThread1/ImplementsCallableInterface.png)
+ ![ImplementsCallableInterface.png](/images/Core_Java/JavaThread1/ImplementsCallable.png)
  
 根据上面的分析可以看出，Callable接口与Runnable接口差别并不大，区别是Callable接口可以有返回值，并且可以抛出异常罢了。
 
