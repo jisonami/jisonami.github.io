@@ -229,4 +229,5 @@ public class CallableTest implements Callable<Integer>{
 
 代码执行结果为
 
+
 ![CallableCallback.png](/images/Core_Java/JavaThread1/CallableCallback.png)
