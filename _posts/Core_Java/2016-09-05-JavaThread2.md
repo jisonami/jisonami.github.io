@@ -44,7 +44,7 @@ tags: Java 多线程
 
 Java线程的状态控制其实主要是对运行状态的控制，通过不同的方法进入不同的状态，而其它状态进入运行状态是有CPU来控制的。
 
-下面的线程状态转换图可以很清晰地说明这一点。
+下面的线程状态转换图可以很清晰地说明这一点。（图片来源于网络）
  
 ![ThreadStatus.png](/images/Core_Java/JavaThread2/ThreadStatus.png)
  
@@ -83,7 +83,7 @@ public class ThreadTest extends Thread{
 
 代码执行结果为
  
-![ThreadStatus.png](/images/Core_Java/JavaThread2/ThreadStatus.png)
+![ThreadStatus.png](/images/Core_Java/JavaThread2/ThreadSleep.jpg)
 
 从运行结果中可以看出，在线程对象调用start()方法进入就绪状态之后立刻调用sleep()方法使主线程沉睡了1毫秒，系统将当前执行线程切换为ThreadTest类的实例，原本“start()方法调用后”在“线程执行中”之后打印的行为变成了“线程执行中”先于“start()方法调用后”。这就是sleep()方法的作用，是当前执行线程睡眠一段时间。
 
@@ -240,7 +240,7 @@ public class DaemonTest extends Thread{
 
 从运行结果中可以看到，后台线程的打印语句没有执行，因为普通线程和main线程已经执行完毕了。线程执行体run()方法中通过isDaemon()方法做了一个判断，若是后台线程这调用sleep()方法沉睡1毫秒，将线程执行的机会让给其它线程。若是没有调用sleep()方法，则有可能看到后台线程打印语句的输出结果，因为有可能后台线程先于普通线程执行。
 
-####结束一个线程
+#### 结束一个线程
 
 线程是有生命周期的，当一个线程方法体执行完毕时，该线程就死亡了，也就意味着这一个线程结束了。
 
