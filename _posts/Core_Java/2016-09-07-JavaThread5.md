@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Java多线程（五）--其它线程问题"
+title:  "Java多线程（五）--其它线程安全问题"
 date:   2016-09-07 23:14:54
 categories: Core_Java
 tags: Java 多线程
@@ -9,14 +9,22 @@ tags: Java 多线程
 * content
 {:toc}
 
-Java多线程
+前面四篇文章已经把基本的Java多线程编程的知识介绍完了，下面介绍下其余的一些线程编程技巧，包括
+
+1. 如何包装线程不安全的集合类
+
+2. 使用ThreadLocal线程本地变量
+
+3. 使用concurrent包下线程安全的集合类
+
+4. 使用原子类编程处理并发问题
+
+5. 使用final关键字处理并发问题
 
 
 
 
-### Java多线程下的并发编程技巧
-
-####包装线程不安全的集合
+### 包装线程不安全的集合
 
 使用Java编程时经常使用的集合类ArrayList、HashSet和HashMap等都是线程不安全的集合。
 
@@ -62,7 +70,7 @@ public class SynchronizedListTest {
 
 从反射得到的信息可以知道包装后的集合是Collections的内部类SynchronizedRandomAccessList。而通过源码可以看出其它的集合被响应的方法包装后也是Collections对应的内部类，分别对应SynchronizedCollection、SynchronizedSet、SynchronizedSortedSet、SynchronizedMap、SynchronizedSortedMap等Collections的内部类。
 
-#### 使用线程安全的集合类
+### 使用线程安全的集合类
 
 前面说到一个技巧是包装线程不安全的集合类，可以得到一个线程安全的集合类。这种方法一般是一开始没有考虑到多线程环境或者为了效率。若是一开始就知道程序会运行在高并发情景下，并且数据的正确性比较重要但是程序效率又没那么重要时，可以考虑直接使用java.util.concurrent包下的线程安全的集合类。
 
@@ -74,13 +82,16 @@ Java提供的线程安全的集合有两类。一是类名以Concurrent开头的
 
 ![ConcurrentCollection.jpg](/images/Core_Java/JavaThread5/ConcurrentCollection.jpg)
 
-#### 使用ThreadLocal类
+### 使用ThreadLocal类
 
 ThreadLocal类提供的是线程本地值，对于每一个访问该类实例的线程，都有一个副本值，线程所有的取值设值操作都在该线程的本地值中操作，互不相干扰。
 
 ThreadLocal有以下三个方法：
+
 T get() 返回此线程局部变量的当前线程副本中的值。
+
 void remove() 移除此线程局部变量当前线程的值。
+
 void set(T value) 将此线程局部变量的当前线程副本中的值设置为指定值。
 
 代码示例如下：

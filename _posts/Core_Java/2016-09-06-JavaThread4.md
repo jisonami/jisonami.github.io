@@ -18,9 +18,13 @@ tags: Java 多线程
 
 
 
+### 线程池类图
+
 根据继承关系，绘制类图如下
  
 ![ThreadPoolClassDiagram.jpg](/images/Core_Java/JavaThread4/ThreadPoolClassDiagram.jpg)
+
+#### ThreadPoolExecutor类
 
 ThreadPoolExecutor类有四个构造方法，分别是：
 
@@ -115,9 +119,13 @@ public class ThreadPoolExecutorTest extends Thread {
 
 ![ThreadPool.jpg](/images/Core_Java/JavaThread4/ThreadPool.jpg)
 
-这里在构造ThreadPoolExecutor对象时，使用了参数最多的构造方法，后面两个参数使用的是其它构造方法采取的默认值，平时使用时，我们使用最简单的构造方法构造一个ThreadPoolExecutor线程池对象即可。若是有更复杂的需求，则可以自己实现ThreadFactory接口。在Java6提供的接口里，只有一个Executors的内部类DefaultThreadExecutor实现了ThreadFactory接口。
+这里在构造ThreadPoolExecutor对象时，使用了参数最多的构造方法，后面两个参数使用的是其它构造方法采取的默认值，平时使用时，我们使用最简单的构造方法构造一个ThreadPoolExecutor线程池对象即可。若是有更复杂的需求，则可以自己实现ThreadFactory接口。
 
-而ThreadPoolExecutor的子类ScheduledThreadPoolExecutor则与定期执行命令相关的线程池。当需要多个辅助线程时，或者要求 ThreadPoolExecutor 具有额外的灵活性或功能时，此类要优于 Timer，因为Timer是单线程的。
+在Java6提供的接口里，只有一个Executors的内部类DefaultThreadExecutor实现了ThreadFactory接口。
+
+#### ScheduledThreadPoolExecutor
+
+ThreadPoolExecutor的子类ScheduledThreadPoolExecutor则与定期执行命令相关的线程池。当需要多个辅助线程时，或者要求 ThreadPoolExecutor 具有额外的灵活性或功能时，此类要优于 Timer，因为Timer是单线程的。
 
 一旦启用已延迟的任务就执行它，但是有关何时启用，启用后何时执行则没有任何实时保证。按照提交的先进先出 (FIFO) 顺序来启用那些被安排在同一执行时间的任务。 
 
@@ -170,15 +178,22 @@ public class ScheduledThreadPoolExecutorTest<V> implements Callable<V>{
 
 ![ScheduledThreadPoolExecutor.jpg](/images/Core_Java/JavaThread4/ScheduledThreadPoolExecutor.jpg)
 
-上面的代码其实只是用到了从ThreadPoolExecutor类继承来的方法，并没有使用ScheduledThreadPoolExecutor类我称之为“多线程定时任务线程池”的功能。要使ScheduledThreadPoolExecutor线程池能够定时的执行任务，需要使用ScheduledThreadPoolExecutor类的schedule()方法或scheduleAtFixedRate()方法。它们的方法签名如下：
+上面的代码其实只是用到了从ThreadPoolExecutor类继承来的方法，并没有使用ScheduledThreadPoolExecutor类我称之为“多线程定时任务线程池”的功能。
+
+要使ScheduledThreadPoolExecutor线程池能够定时的执行任务，需要使用ScheduledThreadPoolExecutor类的schedule()方法或scheduleAtFixedRate()方法。
+
+它们的方法签名如下：
+
+```java
+// 创建并执行在给定延迟后启用的 ScheduledFuture。
 <V> ScheduledFuture<V> schedule(Callable<V> callable, long delay, TimeUnit unit) 
-创建并执行在给定延迟后启用的 ScheduledFuture。
- ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) 
-创建并执行在给定延迟后启用的一次性操作。
+// 创建并执行在给定延迟后启用的一次性操作。
+ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) 
+// 创建并执行一个在给定初始延迟后首次启用的定期操作，后续操作具有给定的周期；也就是将在 initialDelay 后开始执行，然后在 initialDelay+period 后执行，接着在 initialDelay + 2 * period 后执行，依此类推。
 ScheduledFuture<?> scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit)
-创建并执行一个在给定初始延迟后首次启用的定期操作，后续操作具有给定的周期；也就是将在 initialDelay 后开始执行，然后在 initialDelay+period 后执行，接着在 initialDelay + 2 * period 后执行，依此类推。
+// 创建并执行一个在给定初始延迟后首次启用的定期操作，随后，在每一次执行终止和下一次执行开始之间都存在给定的延迟。
 ScheduledFuture<?> scheduleWithFixedDelay(Runnable command, long initialDelay, long delay,TimeUnit unit) 
-创建并执行一个在给定初始延迟后首次启用的定期操作，随后，在每一次执行终止和下一次执行开始之间都存在给定的延迟。
+```
 
 这里简单举个定时任务的例子，大部分代码如上个例子没变，只需要改几行代码即可。
 
@@ -200,40 +215,67 @@ public static void main(String[] args) throws InterruptedException, ExecutionExc
 
 而代码的执行结果也没有变化，唯一不同的是，每个线程执行前都会等待3秒钟。也就是相当于把线程定时在3秒后执行而不是立刻执行。
 
-对于类图中的ForkJoinPool这个类，这是Java7新增的类，Java8对这个类又增加了几个方法。ForkJoinPool用于将一个大任务拆分成多个小任务并行处理，处理完后再将结果合并得到最终结果。目前而言，这个类几乎不会用到，只有当对性能要求很高的程序才会使用它进行优化。
+对于类图中的ForkJoinPool这个类，这是Java7新增的类，Java8对这个类又增加了几个方法。
+
+ForkJoinPool用于将一个大任务拆分成多个小任务并行处理，处理完后再将结果合并得到最终结果。目前而言，这个类几乎不会用到，只有当对性能要求很高的程序才会使用它进行优化。
 
 以上便是手动构造线程池的一般方法，从以上手动构造一个线程池的代码中可以看出，参数多且复杂，
 
 **幸运的是，从Java5开始，提供了Executor并发框架来简化线程池的创建**
+
+### Executor框架
 	
-Executor框架能够创建两类的线程池，分别对应前面介绍的ThreadPoolExecutor类和它的子类ScheduledThreadPoolExecutor，Java提供了Executors工厂类，提供了一些静态工厂方法来构造常用的线程池，并且参数少了，代码意图更加清晰。
+Executor框架能够创建两类的线程池，分别对应前面介绍的ThreadPoolExecutor类和它的子类ScheduledThreadPoolExecutor。
 
-1、三种ThreadPoolExecutor类型的线程池	
+Java提供了Executors工厂类，提供了一些静态工厂方法来构造常用的线程池，并且参数少了，代码意图更加清晰。
+
+#### 三种ThreadPoolExecutor类型的线程池	
+
 （1）可重用固定线程数的线程池FixedThreadPool
-newFixedThreadPool(int nThreads) 
-创建一个可重用固定线程数的线程池，以共享的无界队列方式来运行这些线程。
-newFixedThreadPool(int nThreads, ThreadFactory threadFactory)
-创建一个可重用固定线程数的线程池，以共享的无界队列方式来运行这些线程，在需要时使用提供的 ThreadFactory 创建新线程。
-（2）只有单线程的线程池SingleThreadExecutor
-newSingleThreadExecutor() 
-创建一个使用单个 worker 线程的 Executor，以无界队列方式来运行该线程。
-newSingleThreadExecutor(ThreadFactory threadFactory) 
-创建一个使用单个 worker 线程的 Executor，以无界队列方式来运行该线程，并在需要时使用提供的 ThreadFactory 创建新线程。
-（3）具有缓存功能的线程池CachedThreadPool
-newCachedThreadPool() 
-创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们。
-newCachedThreadPool(ThreadFactory threadFactory) 
-创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们，并在需要时使用提供的 ThreadFactory 创建新线程。
 
-2、两种ScheduledThreadPoolExecutor类型的线程池
+```java
+// 创建一个可重用固定线程数的线程池，以共享的无界队列方式来运行这些线程。
+newFixedThreadPool(int nThreads) 
+// 创建一个可重用固定线程数的线程池，以共享的无界队列方式来运行这些线程，在需要时使用提供的 ThreadFactory 创建新线程。
+newFixedThreadPool(int nThreads, ThreadFactory threadFactory)
+```
+
+（2）只有单线程的线程池SingleThreadExecutor
+
+```java
+// 创建一个使用单个 worker 线程的 Executor，以无界队列方式来运行该线程。
+newSingleThreadExecutor() 
+// 创建一个使用单个 worker 线程的 Executor，以无界队列方式来运行该线程，并在需要时使用提供的 ThreadFactory 创建新线程。
+newSingleThreadExecutor(ThreadFactory threadFactory) 
+```
+
+（3）具有缓存功能的线程池CachedThreadPool
+
+```java
+// 创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们。
+newCachedThreadPool() 
+// 创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们，并在需要时使用提供的 ThreadFactory 创建新线程。
+newCachedThreadPool(ThreadFactory threadFactory) 
+```
+
+### 两种ScheduledThreadPoolExecutor类型的线程池
+
 （1）可延迟执行线程任务的线程池ScheduledThreadPoolExecutor
+
+```java
+// 创建一个线程池，它可安排在给定延迟后运行命令或者定期地执行。
 newScheduledThreadPool(int corePoolSize) 
-创建一个线程池，它可安排在给定延迟后运行命令或者定期地执行。
+// 创建一个线程池，它可安排在给定延迟后运行命令或者定期地执行。
 newScheduledThreadPool(int corePoolSize, ThreadFactory threadFactory) 
-创建一个线程池，它可安排在给定延迟后运行命令或者定期地执行。
+```
+
 （2）单线程可延迟执行线程任务的线程池SingleThreadScheduledExecutor
+
+```java
+// 创建一个单线程执行程序，它可安排在给定延迟后运行命令或者定期地执行。
 newSingleThreadScheduledExecutor() 
-创建一个单线程执行程序，它可安排在给定延迟后运行命令或者定期地执行。
+// 创建一个单线程执行程序，它可安排在给定延迟后运行命令或者定期地执行。
 newSingleThreadScheduledExecutor(ThreadFactory threadFactory) 
-创建一个单线程执行程序，它可安排在给定延迟后运行命令或者定期地执行。
+```
+
 在使用Executors的静态工厂方法得到线程池后，就可以使用之前使用线程池的方法来使用线程池了。

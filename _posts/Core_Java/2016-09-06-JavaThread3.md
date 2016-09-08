@@ -9,8 +9,6 @@ tags: Java 多线程
 * content
 {:toc}
 
-本文是Java多线程第三篇，关于线程锁与线程之间的通信
-
 在并发的情况下，多个线程一起访问同一个资源时会出现线程同步的问题。
 
 很多程序的bug都是由于线程不同步而造成的，解决线程不同步的方法最常用的是使用Java的锁机制对代码进行加锁，而加锁的房补不同和加锁的范围不同又分几种情况。除此之外还可以使用特殊域变量(volatile)实现线程同步。
@@ -81,7 +79,11 @@ public class SynchronizedMethodTest {
 
 **使用synchronized关键字对类方法进行加锁**
 
-前面说到每个对象都有一把锁，同一时间只能有一个线程获取这把锁，然后执行被synchronized关键字修饰的一段代码或方法。而每个类也有这样一把锁，对于每个类里面的静态代码块或者静态方法使用synchronized关键字进行加锁，称之为静态同步代码块或者静态同步方法。同样的，同一时间内，也只能有一个线程执行一个类里面的静态同步代码块或者静态同步方法，并且当静态同步代码块或静态同步方法被执行时，这个类的同步锁被占用，直到静态同步代码块或静态同步方法执行完毕，同步锁被解除时，其它线程才能获得同步锁，执行静态同步代码或者静态同步方法。其实就是比实例代码块和实例方法前面多了个static关键字。
+前面说到每个对象都有一把锁，同一时间只能有一个线程获取这把锁，然后执行被synchronized关键字修饰的一段代码或方法。
+
+而每个类也有这样一把锁，对于每个类里面的静态代码块或者静态方法使用synchronized关键字进行加锁，称之为静态同步代码块或者静态同步方法。
+
+同样的，同一时间内，也只能有一个线程执行一个类里面的静态同步代码块或者静态同步方法，并且当静态同步代码块或静态同步方法被执行时，这个类的同步锁被占用，直到静态同步代码块或静态同步方法执行完毕，同步锁被解除时，其它线程才能获得同步锁，执行静态同步代码或者静态同步方法。其实就是比实例代码块和实例方法前面多了个static关键字。
 
 代码示例如下：（以静态同步方法为例）
 
@@ -103,7 +105,13 @@ Lock和ReadWriteLock及其实现类的类图如下
  
 ![LockAndConditionClassDiagram.jpg](/images/Core_Java/JavaThread3/LockAndConditionClassDiagram.jpg)
 
-除了使用synchronized加锁的方式外，JDK还提供了Lock和ReadWriteLock两个接口来实现手动加锁。实际编码中我们使用Lock的实现类ReentrantLock（可重入锁）和ReadWriteLock的实现类ReentrantReadWriteLock（可重入读写锁）来进行编码操作。手动加锁的方式更加灵活，提供了很多对锁进行操作的方法，比如锁对象的各种属性，是否被某个线程持有该锁等等。ReentrantLock和ReentrantReadWriteLock两个类唯一的区别是当读取某个资源时，ReentrantLock不允许多个线程同时读取，即使是需要多个线程同时读取的资源也不能被其它线程读取，而ReentrantReadWriteLock的ReadLock是允许多线程获取的，WriteLock只能单个线程获取。当然，若对同步锁没有特殊的需求，我们使用synchronized关键字修饰的同步代码块和同步方法就可以了，效果是一样的。
+除了使用synchronized加锁的方式外，JDK还提供了Lock和ReadWriteLock两个接口来实现手动加锁。
+
+实际编码中我们使用Lock的实现类ReentrantLock（可重入锁）和ReadWriteLock的实现类ReentrantReadWriteLock（可重入读写锁）来进行编码操作。
+
+手动加锁的方式更加灵活，提供了很多对锁进行操作的方法，比如锁对象的各种属性，是否被某个线程持有该锁等等。
+
+ReentrantLock和ReentrantReadWriteLock两个类唯一的区别是当读取某个资源时，ReentrantLock不允许多个线程同时读取，即使是需要多个线程同时读取的资源也不能被其它线程读取，而ReentrantReadWriteLock的ReadLock是允许多线程获取的，WriteLock只能单个线程获取。当然，若对同步锁没有特殊的需求，我们使用synchronized关键字修饰的同步代码块和同步方法就可以了，效果是一样的。
 
 可重入锁ReentrantLock使用的语法格式为：
 
@@ -220,7 +228,9 @@ class ClassB {
  
 ![DeadLock.jpg](/images/Core_Java/JavaThread3/DeadLock.jpg)
 
-从代码执行结果中可以看出，ClassA和ClassB两个类的secondMethod()方法都没有执行，两个线程执行到调用secondMethod()方法时，调用secondMethod()方法的对象的同步锁还被另一个线程占用着，然后两个线程就相互阻塞了，线程没有执行完，也没有什么报错。在多线程的实际编程中，这样的死锁是要小心避免的。
+从代码执行结果中可以看出，ClassA和ClassB两个类的secondMethod()方法都没有执行，两个线程执行到调用secondMethod()方法时，调用secondMethod()方法的对象的同步锁还被另一个线程占用着，然后两个线程就相互阻塞了，线程没有执行完，也没有什么报错。
+
+在多线程的实际编程中，这样的死锁是要小心避免的。
 
 ### 线程通信
 
