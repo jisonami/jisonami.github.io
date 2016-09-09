@@ -82,7 +82,8 @@ public class JavaReflect implements MyInterface{
 
 利用这些信息，我们可以做到以下几点。 
 
-一．	实例化对象 
+### 反射实例化对象 
+
 反射实例化对象的方式有两种，一种是调用Class类的newInstance()方法，该方法会调用无参构造方法实例化一个对象。 
 
 ```java
@@ -96,7 +97,7 @@ Constructor<?> constructor = clazz.getConstructor(String.class);
 Object obj = constructor.newInstance("一个参数");  
 ```
 
-二．	对字段取值和设值 
+### 反射对字段取值和设值 
 
 反射对字段取值和设值都需要先获取Field类的实例，然后调用Field类的取值和设值方法进行取值和设值。 
 
@@ -128,7 +129,8 @@ method.invoke(obj, "字符串", 1);
 
 在Java反射中，数组使用Array描述，Array类主要有三类方法，全部都是静态方法。 
 
-1.	实例化数组的方法 
+#### 实例化数组的方法 
+
 newInstance(Class<?> componentType, int... dimensions) 创建一个具有指定的组件类型和维度的新数组。 
 
 ```java
@@ -140,7 +142,8 @@ newInstance(Class<?> componentType, int length) 创建一个具有指定的组�
 Object array1 = Array.newInstance(clazz, 2);  
 ```
 
-2.	对数组元素设值的方法 
+#### 对数组元素设值的方法 
+
 set(Object array, int index, Object value) 将指定数组对象中索引组件的值设置为指定的新值，若是原始类型数组则是setXXX(Object array, int index, Object value)方法。 
 
 ```java
@@ -150,7 +153,8 @@ Object obj2 = clazz.newInstance();
     Array.set(Array.get(array2, 1), 2, obj2);  
 ```
 
-3.	对数组元素取值的方法 
+#### 对数组元素取值的方法 
+
 get(Object array, int index) 返回指定数组对象中索引组件的值，若是原始类型数组则是getXXX(Object array, int index)方法。 
 
 ```java
@@ -162,7 +166,7 @@ Object obj3 = Array.get(Array.get(array2, 1), 2);
 
 Java的动态代理使用起来很简单，使用Proxy类和InvocationHandler接口就可以实现。Java实现的动态代理对象就是实现了指定n个接口的类的一个对象，使用代理对象调用任何方法时，都会替换为InvocationHandler接口实现类重写的invoke方法。 
 
-1.	实现InvocationHandler接口，重写invoke(Object proxy, Method method, Object[] args)方法，该方法就是代理方法，将会替换掉代理对象被调用的方法。 
+**实现InvocationHandler接口，重写invoke(Object proxy, Method method, Object[] args)方法，该方法就是代理方法，将会替换掉代理对象被调用的方法** 
 
 ```java
 public class InvocationHandlerImpl implements InvocationHandler{  
@@ -180,7 +184,7 @@ public class InvocationHandlerImpl implements InvocationHandler{
 }  
 ```
 
-2.	调用Proxy的静态方法创建代理的对象，有以下两种方法 
+**调用Proxy的静态方法创建代理的对象，有以下两种方法** 
 
 一种方法是使用Proxy的Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces, InvocationHandler h)方法直接创建代理对象， 
 
@@ -197,16 +201,19 @@ Class<?> proxyClass = Proxy.getProxyClass(clazz.getClassLoader(),  MyInterface.c
         Object proxyObject = proxyClass.getConstructor(InvocationHandler.class).newInstance(new InvocationHandlerImpl(obj));  
 ```
 
-3.	使用代理的对象调用目标方法。 
+**使用代理的对象调用目标方法。** 
 
 ```java
 ((MyInterface) proxyObject).method("使用动态代理调用该方法", 0);  
 ```
 
-六．	反射与泛型 
-参考我的博文Java反射获取实际泛型类型参数 
-七．	反射与注解 
-参考我的博文Java注解知识点总结 
+### 反射与泛型 
+
+参考我的博文[Java反射获取实际泛型类型参数](/2016/03/15/JavaReflectiionAndGenericType/) 
+
+### 反射与注解 
+
+参考我的博文[Java注解知识点总结](/2016/03/19/JavaAnnotation/)
 
 上面的代码完整的示例如下： 
 

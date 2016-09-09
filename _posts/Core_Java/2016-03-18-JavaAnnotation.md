@@ -59,23 +59,23 @@ Public class ClassName{
 
 下面介绍Java提供的五个常用的注解： 
 
-1.	用于标记Java代码元素已过时的注解：@Deprecated 
+**用于标记Java代码元素已过时的注解：@Deprecated** 
 
 用 @Deprecated 注解的程序元素，不鼓励程序员使用这样的元素，通常是因为它很危险或存在更好的选择，这种程序元素很可能下一代API就取消掉了。在使用不被赞成的程序元素或在不被赞成的代码中执行重写时，编译器会发出警告。@Deprecated注解基本可以用于任何程序元素。 
 
-2.	用于标记重写基类方法的注解：@Override 
+**用于标记重写基类方法的注解：@Override**
 
 表示一个方法声明打算重写基类中的另一个方法声明。如果方法利用此注解类型进行注解但没有重写基类方法，则编译器会生成一条错误消息。@Override注解只能用于方法生命时。 
 
-3.	用于标记抑制编译器警告的注解：@SuppressWarnings 
+**用于标记抑制编译器警告的注解：@SuppressWarnings** 
 
 用 @ SuppressWarnings注解的程序元素可能会产生编译器警告，而使用了这个注解则表示取消了编译器的警告信息。@SuppressWarnings注解基本可以用于任何程序元素。 
 
-4.	用于标记方法编译时可能发生堆污染警告的注解（Java7新增注解）：@SafeVarargs 
+**用于标记方法编译时可能发生堆污染警告的注解（Java7新增注解）：@SafeVarargs** 
 
 在将非泛型对象赋值给泛型对象时会产生泛型擦除，而在赋值后的非泛型对象上取值操作时会产生运行时异常，称之为堆污染（Heap Pollution）。使用@SafeVarargs注解修饰后，将不会产生堆污染警告。@SafeVarargs只能用在构造方法或普通方法声明时。事实上在使用Eclipse编写Java代码时对@SafeVarargs注解修饰的方法会报错，一般会使用@SuppressWarnings("unchecked")替代。 
 
-5.	用于标记函数式接口的注解（Java8新增）：@FunctionalInterface 
+**用于标记函数式接口的注解（Java8新增）：@FunctionalInterface**
 
 Java8新增了函数式编程，只含有一个抽象方法的接口在Java8中称为函数式接口，使用@FunctionalInterface注解修饰。@FunctionalInterface注解只能用在接口声明时。 
 
@@ -108,11 +108,11 @@ public class AnnotationTest implements MyFunctionalInterface{
 
 Java提供了几个用来定义注解的注解，又叫元注解，只能用在类型声明上，用来定义注解的使用范围和生命周期等等。 
 
-@Documented	用于标记一个注解是否会被javadoc提取成API文档 
+**@Documented	用于标记一个注解是否会被javadoc提取成API文档** 
 
-@Inherited	用于标记一个注解是否会被使用的类的扩展类继承，该注解修饰的注解只能用在类的声明上才有效， 
+**@Inherited	用于标记一个注解是否会被使用的类的扩展类继承，该注解修饰的注解只能用在类的声明上才有效，** 
 
-@Retention	用于标记一个注解的声明周期，使用枚举类RetentionPolicy的三个枚举值决定，只能使用其中一个枚举值。 
+**@Retention	用于标记一个注解的声明周期，使用枚举类RetentionPolicy的三个枚举值决定，只能使用其中一个枚举值。** 
 
 SOURCE 编译器要丢弃的注解。 
 
@@ -120,7 +120,7 @@ CLASS 编译器将把注解记录在类文件中，但在运行时 VM 不需要�
 
 RUNTIME 编译器将把注解记录在类文件中，在运行时 VM 将保留注解，因此可以反射性地读取。 
 
-@ Target	用于标记一个注解能够用于哪些程序元素，使用枚举类ElementType的枚举值决定，可以使用多个枚举值。 
+**@ Target	用于标记一个注解能够用于哪些程序元素，使用枚举类ElementType的枚举值决定，可以使用多个枚举值。 **
 
 ANNOTATION_TYPE 注解类型声明 
 
@@ -144,11 +144,11 @@ TYPE_PARAMETER Type parameter declaration（类型参数声明）
 
 TYPE_USE Use of a type（一个类的任意元素都可使用） 
 
-Java8新增了两个元注解 
+### Java8新增了两个元注解 
 
-@ Repeatable	用于标记一个注解可以重复多次使用在一个程序元素上。 
+**@ Repeatable	用于标记一个注解可以重复多次使用在一个程序元素上。** 
 
-@ Native	用于标记一个注解用在一个字段的常量值可能来自非Java代码，这是目前Java元注解中唯一一个RetentionPolicy. SOURCE级别的元注解，其余元注解都是RUNTIME级别的。平时似乎也不会用到。 
+**@ Native	用于标记一个注解用在一个字段的常量值可能来自非Java代码，这是目前Java元注解中唯一一个RetentionPolicy. SOURCE级别的元注解，其余元注解都是RUNTIME级别的。平时似乎也不会用到。** 
 
 Java定义注解的语法使用@interface来定义，例如我们可以定义一个这样的注解。 
 
@@ -293,7 +293,7 @@ class AnnotationUserDefinedExt extends AnnotationUserDefined{
 
 提取注解信息是使用反射来实现的，反射只能获取@Retention(RetentionPolicy.RUNTIME)修饰的注解的信息，若是SOURCE和CLASS级别的注解，反射是获取不到的，只能使用代码分析框架和字节码分析框架是获取注解信息了。 
 
-**Java的反射知识点参考我的博文[Java反射知识点总结]()**
+**Java的反射知识点参考我的博文[Java反射知识点总结](/2016/03/20/JavaReflection/)**
 
 Java的每种类型的程序元素（Class、Constructor、Field、Method、Parameter）都实现了AnnotatedElement接口，当反射获取到一个程序元素后，就可以使用以下方法获得该程序元素上修饰的注解和注解上的字段信息。 
 
