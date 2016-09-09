@@ -11,7 +11,7 @@ tags: Java 多线程
 
 在并发的情况下，多个线程一起访问同一个资源时会出现线程同步的问题。
 
-很多程序的bug都是由于线程不同步而造成的，解决线程不同步的方法最常用的是使用Java的锁机制对代码进行加锁，而加锁的房补不同和加锁的范围不同又分几种情况。除此之外还可以使用特殊域变量(volatile)实现线程同步。
+很多程序的bug都是由于线程不同步而造成的，解决线程不同步的方法最常用的是使用Java的锁机制对代码进行加锁，而加锁的方法不同和加锁的范围不同又分几种情况。除此之外还可以使用特殊域变量(volatile)实现线程同步。
 
 那么在什么时候需要用到线程同步呢？前面说了，多个线程访问同一个资源的时候就需要对代码进行同步操作了。
 
@@ -162,16 +162,18 @@ volatile关键字为域变量的访问提供了一种免锁机制，使用volati
 
 还是前面的加法示例，对变量sum加了volatile关键字修饰，同时synchronized就没有必要存在了。
 
+不过volatile关键字是需要跟concurrent包下线程安全的类结合使用的，这里以AtomicInteger为例
+
 代码示例如下：
 
 ```java
 public class VolatileTest {
-	public volatile int sum;
+	public volatile AtomicInteger sum = new AtomicInteger(0);
 	public void add(int aValue){
-		sum = sum + aValue;
+		sum.addAndGet(aValue);
 	}
 	public void sub(int aValue){
-		sum = sum - aValue;
+		sum.addAndGet(-aValue);
 	}
 }
 ```
@@ -323,9 +325,9 @@ class TakeThread extends Thread {
 }
 ```
 
-代码执行结果为：（如图2.14所示）
+代码执行结果为：
  
-图 2.14
+![ThreadCommunicationTest.jpg](/images/Core_Java/JavaThread3/ThreadCommunicationTest.jpg)
 
 #### 使用Condition实现线程通信
 
