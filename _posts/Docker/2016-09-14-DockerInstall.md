@@ -204,6 +204,12 @@ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E8
 **配置docker安装源**
 
 ```
+vi /etc/apt/sources.list.d/docker.list
+```
+
+然后输入
+
+```
 deb https://apt.dockerproject.org/repo ubuntu-xenial main
 ```
 
@@ -273,6 +279,12 @@ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E8
 ```
 
 **配置docker安装源**
+
+```
+vi /etc/apt/sources.list.d/docker.list
+```
+
+然后输入
 
 ```
 deb https://apt.dockerproject.org/repo debian-stretch main
