@@ -89,7 +89,7 @@ yum install curl
 
 默认情况下，我们在docker hub上pull镜像时速度是很慢的，幸好现在有阿里云提供的docker mirror加速器来提高pull镜像的速度，配好加速器后pull速度可以达到1M以上，之前有个daocloud docker mirror在docker-engine中不太好用了。
 
-在[dev.aliyun.com](dev.aliyun.com)注册一个账号，然后打开管理中心，找到加速器页面，里面有详细ubuntu、centos、mac os x和windows下的加速器使用方式，就不罗嗦介绍了
+在[dev.aliyun.com](https://dev.aliyun.com)注册一个账号，然后打开管理中心，找到加速器页面，里面有详细ubuntu、centos、mac os x和windows下的加速器使用方式，就不罗嗦介绍了
 
 **看到这里，如果您已经成功安装了docker-engine，那么下面的安装方式就不用看了。根据docker官方文档的安装方式特别慢，特别慢，特别慢...**
 
