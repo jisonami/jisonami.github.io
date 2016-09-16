@@ -91,7 +91,7 @@ yum install curl
 
 在[dev.aliyun.com](dev.aliyun.com)注册一个账号，然后打开管理中心，找到加速器页面，里面有详细ubuntu、centos、mac os x和windows下的加速器使用方式，就不罗嗦介绍了
 
-**看到这里，如果您已经成功安装了docker-engine，那么下面的安装方式就不用看了。根据docker官方文档的安装方式**特别慢，特别慢，特别慢...****
+**看到这里，如果您已经成功安装了docker-engine，那么下面的安装方式就不用看了。根据docker官方文档的安装方式特别慢，特别慢，特别慢...**
 
 **当然如果您需要在windows上安装docker-engine，那么请看[windows安装docker-engine](#windows7docker-toolbox)**
 
