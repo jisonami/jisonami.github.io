@@ -1,12 +1,4 @@
- test
 
-三、Java多线程下的并发编程技巧
-（一）包装线程不安全的集合○7
-使用Java编程时经常使用的集合类ArrayList、HashSet和HashMap等都是线程不安全的集合。当多个线程同时访问同一个这种线程不安全的集合类时，就会出现问题。因此Java提供了一个Collections工具类中的多个静态方法来将线程不安全的集合类包装成线程安全的集合类。这些静态方法都是以synchronized开头的方法。方法签名如下：
-<T> Collection<T> synchronizedCollection(Collection<T> c)
-返回指定 collection 支持的同步（线程安全的）collection。
-<T> List<T> synchronizedList(List<T> list)
-返回指定列表支持的同步（线程安全的）列表。
 <K,V> Map<K,V> synchronizedMap(Map<K,V> m)
 返回由指定映射支持的同步（线程安全的）映射。
 <T> Set<T> synchronizedSet(Set<T> s)
