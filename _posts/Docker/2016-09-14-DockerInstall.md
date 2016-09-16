@@ -42,10 +42,58 @@ apt-get install docker.io
 
 这种方式只能安装docker1.9及之前的版本
 
-随着docker架构的发展，docker的模块结构也发生了变化，目前docker的安装是通过安装docker-engine包来实现的
+**随着docker架构的发展，docker的模块结构也发生了变化，目前docker的安装是通过安装docker-engine包来实现的**
 
 下面介绍docker-engine的安装方式
 
+
+### 阿里云脚本安装docker-engine
+
+```
+curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/internet | sh -
+```
+
+**启动docker后台进程**
+
+```
+systemctl start docker
+```
+
+**将docker后台进程加入开机自启**
+
+```
+systemctl enable docker
+```
+
+**查看已安装docker版本**
+
+```
+docker -v
+```
+
+阿里云提供的安装脚本基本覆盖了linux全平台的docker-engine安装
+
+如果ubuntu/deepin系列linux没有安装curl命令
+
+```
+apt-get install curl
+```
+
+如果rhel/centos系列linux没有安装curl命令
+
+```
+yum install curl
+```
+
+### 使用阿里云的docker mirror加速器
+
+默认情况下，我们在docker hub上pull镜像时速度是很慢的，幸好现在有阿里云提供的docker mirror加速器来提高pull镜像的速度，配好加速器后pull速度可以达到1M以上，之前有个daocloud docker mirror在docker-engine中不太好用了。
+
+在[dev.aliyun.com](dev.aliyun.com)注册一个账号，然后打开管理中心，找到加速器页面，里面有详细ubuntu、centos、mac os x和windows下的加速器使用方式，就不罗嗦介绍了
+
+**看到这里，如果您已经成功安装了docker-engine，那么下面的安装方式就不用看了。根据docker官方文档的安装方式特别慢**
+
+**当然如果您需要在windows上安装docker-engine，那么请看[windows安装docker-engine](#windows7docker-toolbox)**
 
 ### CentOS下安装docker-engine
 
@@ -140,7 +188,20 @@ docker -v
 
 ### ubuntu16.04安装docker-engine
 
-**配置软件源**
+**更新软件源索引**
+
+```
+apt-get update
+```
+
+**安装证书并且添加GPG **key
+
+```
+apt-get install apt-transport-https ca-certificates
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+```
+
+**配置docker安装源**
 
 ```
 deb https://apt.dockerproject.org/repo ubuntu-xenial main
@@ -186,7 +247,32 @@ docker -v
 
 ### deepin15安装docker-engine
 
-**配置软件源**
+**首先要配置debian的软件源**
+
+```
+vi /etc/apt/sources.list.d/backports.list
+```
+
+然后输入
+
+```
+deb http://http.debian.net/debian wheezy-backports main
+```
+
+**更新软件源索引**
+
+```
+apt-get update
+```
+
+**安装证书并且添加GPG **key
+
+```
+apt-get install apt-transport-https ca-certificates
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+```
+
+**配置docker安装源**
 
 ```
 deb https://apt.dockerproject.org/repo debian-stretch main
@@ -264,7 +350,7 @@ cker.iso...
 
 默认情况下，Docker Toolbox创建的default虚拟机是在C盘下的C:\Users\username\\.docker\machine\machines\default                                                     目录，里面有个disk.vmdk           的虚拟硬盘文件，我们pull命令下来的所有docker镜像都是存放在这个disk.vmdk里面。
 
-所以我们可以像个办法将default的disk.vmdk虚拟硬盘从C盘移到别的盘，然后在virtual中将虚拟硬盘指向新的disk.vmdk，这是会遇到以下错误
+所以我们可以想个办法将default的disk.vmdk虚拟硬盘从C盘移到别的盘，然后在virtual中将虚拟硬盘指向新的disk.vmdk，这是会遇到以下错误
 
 错误：打开虚拟硬盘失败，UUID already exists
 
@@ -277,9 +363,3 @@ vboxmanage.exe internalcommands sethduuid D:\yourDir\disk.vmdk
 然后重新就指向disk.vmdk这个虚拟硬盘文件就好了
 
 参考官方安装文档[windows安装docker-engine](http://docs-stage.docker.com/engine/installation/windows/)
-
-### 使用阿里云的docker mirror加速器
-
-默认情况下，我们在docker hub上pull镜像时速度是很慢的，幸好现在有阿里云提供的docker mirror加速器来提高pull镜像的速度，配好加速器后pull速度可以达到1M以上，之前有个daocloud docker mirror在docker-engine中不太好用了。
-
-在[dev.aliyun.com](dev.aliyun.com)注册一个账号，然后打开管理中心，找到加速器页面，里面有详细ubuntu、centos、mac os x和windows下的加速器使用方式，就不罗嗦介绍了
