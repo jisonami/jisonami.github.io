@@ -43,7 +43,7 @@ docker run -d -p 5000:5000 -v /var/lib/registry:/var/lib/registry --restart=alwa
 
 简单解释一下，上面的命令将registry容器的5000端口映射到本机的5000端口，并且将本机的/var/lib/registry目录挂载到registry容器的/var/lib/registry目录，该目录作为私有仓库存储docker镜像层的目录。
 
-参考[Docker Registry V2官方部署文档] (https://docs.docker.com/registry/deploying/)
+参考[Docker Registry V2官方部署文档](https://docs.docker.com/registry/deploying/)
 
 **那么如何使用这个Docker私有仓库服务呢**
 
