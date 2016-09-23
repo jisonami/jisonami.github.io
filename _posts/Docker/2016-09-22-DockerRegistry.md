@@ -94,6 +94,7 @@ INSECURE_REGISTRY='--insecure-registry 192.168.0.169:5000'
 ```
 
 重启docker服务
+
 ```
 systemctl daemon-reload
 systemctl restart docker
@@ -110,17 +111,20 @@ ADD_REGISTRY='--add-registry 192.168.0.169:5000'
 ```
 
 同样重启docker服务
+
 ```
 systemctl daemon-reload
 systemctl restart docker
 ```
 
 先把原来pull下载的localhost:5000/library/nginx:1.10.1删掉
+
 ```
 docker rmi localhost:5000/library/nginx:1.10.1
 ```
 
 现在我们就可以使用library/nginx:1.10.1来替代localhost:5000/library/nginx:1.10.1了
+
 ```
 docker pull library/nginx:1.10.1
 ```
@@ -136,27 +140,34 @@ docker pull library/nginx:1.10.1
 ```
 cp /lib/systemd/system/docker.service /etc/systemd/system/docker.service
 ```
+
 用vi编辑/etc/systemd/system/docker.service
+
 ```
 vi /etc/systemd/system/docker.service
 ```
 
 找到下面这一行
+
 ```
 ExecStart=/usr/bin/docker-current daemon
 ```
+
 在后面加上--registry-mirror=http://192.168.0.169:5000, 即
+
 ```
 ExecStart=/usr/bin/docker-current daemon --registry-mirror=http://192.168.0.169:5000
 ```
 
 重启docker服务
+
 ```
 systemctl daemon-reload
 systemctl restart docker
 ```
 
 现在我们就可以直接这样从registry私服仓库上pull镜像了，当私有仓库上找不到时，依旧会在Docker Hub上去找
+
 ```
 docker pull nginx:1.10.1
 ```
