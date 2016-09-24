@@ -41,6 +41,8 @@ docker run -d -p 5000:5000 -v /var/lib/registry:/var/lib/registry --restart=alwa
 
 现在一个Docker私有的仓库服务就搭建好了。
 
+测试registry V2容器是否运行正常，浏览器访问localhost:5000看到“{}”这样的结果就正常了。
+
 简单解释一下，上面的命令将registry容器的5000端口映射到本机的5000端口，并且将本机的/var/lib/registry目录挂载到registry容器的/var/lib/registry目录，该目录作为私有仓库存储docker镜像层的目录。
 
 参考[Docker Registry V2官方部署文档](https://docs.docker.com/registry/deploying/)
@@ -176,4 +178,155 @@ docker pull nginx:1.10.1
 
 Docker Hub上这么多镜像我们不可能手动pull下载，tag之后再push到私有仓库上吧？
 
-还真别说，阿里云和daocloud的加速器服务就是这么实现，只不过把手动的操作改用程序实现。
+据说，阿里云和daocloud的加速器服务就是这么实现，只不过把手动的操作改用程序实现。
+
+
+### 使用nginx作为私有仓库服务的反向代理
+
+为了不使Registry V2私有仓库服务的端口直接暴露出来，我们可以使用nginx最为私有仓库服务的反向代理服务器，接收到用户的pull请求后将其转发到Registry V2私有仓库服务，nginx将请求结果返回给用户。
+
+
+同样，我们直接使用docker运行一个nginx容器就可以了。
+
+```
+docker run -d -p 80:80 -p 443:443 --name nginx-test nginx:1.10.1
+```
+
+现在，我们在浏览器访问localhost或127.0.0.1或本机ip地址192.168.0.169就可以看到nginx提供的index页面了。
+
+但是呢，这样以默认配置运行的nginx容器并不能满足我们的要求，我们需要将nginx容器的配置目录从容器中复制出来，然后修改配置文件后，将该目录挂载到该配置目录上重新运行一个nginx容器
+
+**将nginx配置目录复制到当前目录**
+
+```
+docker cp nginx-test:/etc/nginx .
+```
+
+修改nginx配置文件
+
+```
+vi nginx/conf.d/default.conf
+```
+
+**找到这一段配置**
+
+```
+location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+```
+
+修改成
+
+```
+location / {
+        proxy_pass http://registry-v2:5000;
+        #root   /usr/share/nginx/html;
+        #index  index.html index.htm;
+    }
+```
+
+现在把正在运行的nginx-test容器停止并删除
+
+```
+docker stop nginx-test && docker rm nginx-test
+```
+
+重新运行一个新的nginx容器
+
+```
+docker run -d --link registry-v2-test:registry-v2 -v `pwd`/nginx:/etc/nginx -p 80:80 -p 443:443 --name nginx-test nginx:1.10.1
+```
+
+参数--link registry-v2-test:registry-v2将registry-v2-test私有仓库容器映射为registry-v2，这样nginx-test容器就可以通过registry-v2直接访问registry-v2-test容器了
+
+--link参数实际上是将registry-v2写到nginx-test容器的/etc/hosts文件上了。我们可以通过以下命令看到
+
+```
+[root@localhost ~]# docker exec -it nginx-test cat /etc/hosts
+127.0.0.1	localhost
+::1	localhost ip6-localhost ip6-loopback
+fe00::0	ip6-localnet
+ff00::0	ip6-mcastprefix
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+172.17.0.2	registry-v2 b61e5b5c16a6
+172.17.0.3	e4daaf7209c3
+```
+
+这个172.17.0.2和172.17.0.3分别是正在运行的容器registry-v2-test和nginx-test的ip，我们可以通过下面的命令查看一下容器的ip
+
+```
+[root@localhost ~]# docker inspect -f '{{.NetworkSettings.IPAddress}}' registry-v2-teset nginx
+172.17.0.2
+172.17.0.3
+```
+
+参数-v `pwd`/nginx:/etc/nginx将当前目录的nginx目录映射到nginx-test容器的/etc/nginx目录上
+
+现在在浏览器直接访问localhost/v2就可以看到之前使用localhost:5000/v2看到一样的结果了。
+
+那么，docker-engine端的相关配置INSECURE_REGISTRY、ADD_REGISTRY、--registry-mirror就可以去掉端口了。
+
+即http://192.168.0.169:5000就可以变成http://192.168.0.169了。
+
+记得重启docker服务
+
+```
+systemctl daemon-reload
+systemctl restart docker
+```
+
+**如果我们有个域名叫“jisonami.org”，我们在运行nignx容器是加个参数--hostname**
+
+```
+docker run -d --hostname jisonami.org --link registry-v2-test:registry-v2 -v `pwd`/nginx:/etc/nginx -p 80:80 -p 443:443 --name nginx-test nginx:1.10.1
+```
+
+其实这个--hostname参数同样是修改了/etc/hosts文件
+
+```
+[root@localhost ~]# docker exec -it nginx cat /etc/hosts
+127.0.0.1	localhost
+::1	localhost ip6-localhost ip6-loopback
+fe00::0	ip6-localnet
+ff00::0	ip6-mcastprefix
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+172.17.0.2	registry-v2 b61e5b5c16a6
+172.17.0.3	jisonami.org
+```
+
+我们在本机CentOS7上同样需要配置/etc/hosts文件
+
+```
+vi /etc/hosts
+```
+
+增加一行
+
+```
+172.17.0.3	jisonami.org
+```
+
+如果是别的机器，则需要使用IP地址192.168.0.169
+
+```
+192.168.0.169 jisonami.org
+```
+
+现在在浏览器直接访问jisonami/v2就可以看到之前使用localhost:5000/v2看到一样的结果了。
+
+那么，docker-engine端的相关配置INSECURE_REGISTRY、ADD_REGISTRY、--registry-mirror就可以修改成jisonami.org
+
+即http://192.168.0.169:5000就可以变成http://jisonami.org了。
+
+记得重启docker服务
+
+```
+systemctl daemon-reload
+systemctl restart docker
+```
+
+当然，我们现在是通过修改/etc/hosts文件的形式模拟域名的使用，若是公网可以直接访问该域名或者局域网内部搭建了域名服务器则不需要修改/etc/hosts文件了。
