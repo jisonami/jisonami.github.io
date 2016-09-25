@@ -14,7 +14,7 @@ Docker官方开源了搭建Docker Registry的项目。
 有两个版本，一个是python实现的[Docker Registry](https://github.com/docker/docker-registry)
 ，适用于docker1.6及之前的版本，另一个是go实现的[Docker Registry V2](https://github.com/docker/distribution)，适用于Docker1.6及更新的版本。
 
-如果不考虑Docker1.6，那么建议搭建Docker Registry V2。如果需要考虑兼容Docker1.6之前的版本，可以考虑同时搭建Docker Registry和Docker Registry V2，然后使用nginx做路由转发。
+如果不考虑Docker1.6，那么建议搭建Docker Registry V2。如果需要考虑兼容Docker1.6之前的版本，可以考虑同时搭建Docker Registry和Docker Registry V2，然后使用nginx做反向代理。
 
 本文只介绍Docker Registry V2私有仓库服务的搭建以及docker-engine端如何使用私有仓库服务加速docker image的pull速度。
 
@@ -328,5 +328,7 @@ vi /etc/hosts
 systemctl daemon-reload
 systemctl restart docker
 ```
+
+同样的，我们如果需要使用二级域名或者三级域名如法炮制即可。
 
 当然，我们现在是通过修改/etc/hosts文件的形式模拟域名的使用，若是公网可以直接访问该域名或者局域网内部搭建了域名服务器则不需要修改/etc/hosts文件了。
