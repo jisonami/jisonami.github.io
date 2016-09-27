@@ -33,7 +33,7 @@ Docker官方开源了搭建Docker Registry的项目。
 
 没有私有仓库服务之前，pull请求是这样的
 
-![pull请求顺序图](http://g.gravizo.com/g?
+![pull](http://g.gravizo.com/g?
 @startuml;
 "docker engine" -> "Docker Hub": pull request;
 "Docker Hub" --> "docker engine": return a image;
@@ -42,15 +42,15 @@ Docker官方开源了搭建Docker Registry的项目。
 
 使用私有仓库服务之后，pull请求是这样的
 
-![pull请求顺序图](http://g.gravizo.com/g?
-  @startuml;
-  "docker engine" -> "Registry V2": pull request;
-  "Registry V2" --> "docker engine": return a image;
-  ;
-  "docker engine" -> "Docker Hub": fail to pull request from Registry V2, pull request;
-  "Docker Hub" --> "docker engine": return a image;
-  @enduml
-  )
+![pull](http://g.gravizo.com/g?
+@startuml;
+"docker engine" -> "Registry V2": pull request;
+"Registry V2" --> "docker engine": return a image;
+;
+"docker engine" -> "Docker Hub": fail to pull request from Registry V2, pull request;
+"Docker Hub" --> "docker engine": return a image;
+@enduml
+)
 
 #### 搭建私有仓库
 
