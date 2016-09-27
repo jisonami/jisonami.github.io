@@ -31,6 +31,27 @@ Docker官方开源了搭建Docker Registry的项目。
 
 第一个原因是Docker Hub的pull速度实在是太慢了，第二个原因是企业内部构建的docker镜像不可能直接放到Docker Hub上。
 
+没有私有仓库服务之前，pull请求是这样的
+
+![pull请求顺序图](http://g.gravizo.com/g?
+@startuml;
+"docker engine" -> "Docker Hub": pull request;
+"Docker Hub" --> "docker engine": return a image;
+@enduml
+)
+
+使用私有仓库服务之后，pull请求是这样的
+
+![pull请求顺序图](http://g.gravizo.com/g?
+  @startuml;
+  "docker engine" -> "Registry V2": pull request;
+  "Registry V2" --> "docker engine": return a image;
+  ;
+  "docker engine" -> "Docker Hub": fail to pull request from Registry V2, pull request;
+  "Docker Hub" --> "docker engine": return a image;
+  @enduml
+  )
+
 #### 搭建私有仓库
 
 **一条命令部署Docker Registry V2**
