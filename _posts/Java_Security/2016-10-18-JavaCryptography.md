@@ -22,23 +22,23 @@ tags: Java Security
 
 ### 一些概念
 
-Base64算法：Base64是电子邮件传输算法，Base64编码映射表是A-Za-z0-9加上+-=一共64个字符构成的一个映射表，Base64编码就是将一段数据的二进制流使用Base64的编码映射表转换的过程，Base64解码就是根据Base64的编码映射表将Base64编码后的数据重新还原成原来数据的二进制流的过程
+**Base64算法**：Base64是电子邮件传输算法，Base64编码映射表是A-Za-z0-9加上+-=一共64个字符构成的一个映射表，Base64编码就是将一段数据的二进制流使用Base64的编码映射表转换的过程，Base64解码就是根据Base64的编码映射表将Base64编码后的数据重新还原成原来数据的二进制流的过程
 
-加密：将明文转换为密文的过程
+**加密**：将明文转换为密文的过程
 
-解密：将密文转换为明文的过程
+**解密**：将密文转换为明文的过程
 
-密钥：加密解密过程中使用到的编码映射表
+**密钥**：加密解密过程中使用到的编码映射表
 
-消息摘要算法：消息摘要算法对于相同的数据通过散列函数都会得到一段相同的结果值，这个结果值无法逆向还原成原来的数据。有人把消息摘要算法说成是单向加密算法，其实不是。消息摘要算法常常跟非对称密钥算法结合实现数据签名和验证签名的操作。常用的消息摘要算法有MD系列和SHA系列等
+**消息摘要算法**：消息摘要算法对于相同的数据通过散列函数都会得到一段相同的结果值，这个结果值无法逆向还原成原来的数据。有人把消息摘要算法说成是单向加密算法，其实不是。消息摘要算法常常跟非对称密钥算法结合实现数据签名和验证签名的操作。常用的消息摘要算法有MD系列和SHA系列等
 
-对称密钥算法：加密和解密使用的都是同一个密钥，常用的对称密钥算法有DES、DESede、AES、RC2、RC4、Blowfish和IDEA等
+**对称密钥算法**：加密和解密使用的都是同一个密钥，常用的对称密钥算法有DES、DESede、AES、RC2、RC4、Blowfish和IDEA等
 
-非对称密钥算法：加密和解密使用不是同一个密钥，公钥加密数据需要使用私钥解密，私钥加密数据需要使用公钥解密，常用的非对称密钥算法有RSA、ELGAMAL等
+**非对称密钥算法**：加密和解密使用不是同一个密钥，公钥加密数据需要使用私钥解密，私钥加密数据需要使用公钥解密，常用的非对称密钥算法有RSA、ELGAMAL等
 
-密钥协商算法：密钥协商算法是从对称密钥算法向非对称密钥算法过度的一种算法，加解密双方各自生成密钥对，分别将公钥发送对对方，加解密双方各自使用自己的私钥和对方公钥生成本地对称密钥，然后使用本地对称密钥进行加解密，生成的本地对称密钥是相同的，常用的密钥协商算法有DH、ECDH等
+**密钥协商算法**：密钥协商算法是从对称密钥算法向非对称密钥算法过度的一种算法，加解密双方各自生成密钥对，分别将公钥发送对对方，加解密双方各自使用自己的私钥和对方公钥生成本地对称密钥，然后使用本地对称密钥进行加解密，生成的本地对称密钥是相同的，常用的密钥协商算法有DH、ECDH等
 
-基于口令的加解密算法：基于口令的加解密算法不再显示地使用密钥，加解密双方只需要知道一个简单的口令和一个安全随机数（称之为盐）就可以实现加解密了。实际上使用过的还是对称加解密的方法，实现方式是通过口令生成了对称密钥对象。常用的基于口令的加解密算法包括PBEWithMD5AndDES、PBEWithMD5AndTripleDES、PBEWithSHA1AndDESede、PBEWithSHA1AndRC2_40等
+**基于口令的加解密算法**：基于口令的加解密算法不再显示地使用密钥，加解密双方只需要知道一个简单的口令和一个安全随机数（称之为盐）就可以实现加解密了。实际上使用过的还是对称加解密的方法，实现方式是通过口令生成了对称密钥对象。常用的基于口令的加解密算法包括PBEWithMD5AndDES、PBEWithMD5AndTripleDES、PBEWithSHA1AndDESede、PBEWithSHA1AndRC2_40等
 
 **加解密其实是编码转换或者编码替换等的过程，而这个转换的规则则保存在密钥中**
 
@@ -71,6 +71,84 @@ SecretKeySpec：对称密钥规范材料
 X509EncodedKeySpec：公钥编码规范材料
 
 PKCS8EncodedKeySpec：私钥编码规范材料
+
+#### 密钥生成
+
+密钥对生成
+
+```java
+KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(this.keyAlgorithm);
+keyPairGenerator.initialize(this.keySize);
+KeyPair keyPair = keyPairGenerator.generateKeyPair();
+```
+
+获得公钥
+
+```java
+PublicKey publicKey = keyPair.getPublic();
+```
+
+获得私钥
+
+```java
+PrivateKey privateKey = keyPair.getPrivate();
+```
+
+对称密钥生成
+
+```java
+KeyGenerator keyGenerator = KeyGenerator.getInstance(this.keyAlgorithm);
+keyGenerator.init(this.keySize);
+SecretKey secretKey = keyGenerator.generateKey();
+```
+
+#### 密钥还原
+
+公钥还原
+
+```java
+X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(key);
+KeyFactory keyFactory = KeyFactory.getInstance(this.keyAlgorithm);
+PublicKey publicKey = keyFactory.generatePublic(x509EncodedKeySpec);
+```
+
+私钥还原
+
+```java
+PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(key);
+KeyFactory keyFactory = KeyFactory.getInstance(this.keyAlgorithm);
+PrivateKey privateKey = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+```
+
+对称密钥还原
+
+```java
+SecretKey secretKey = new SecretKeySpec(key, this.keyAlgorithm);
+```
+
+或者
+
+```java
+SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(this.keyAlgorithm);
+SecretKey secretKey = secretKeyFactory.generateSecret(keySpec);
+```
+
+#### 加密解密
+
+加密
+
+```java
+Cipher cipher = Cipher.getInstance(this.cipherAlgorithm);
+cipher.init(Cipher.ENCRYPT_MODE, key);
+byte[] encryptData = cipher.doFinal(data);
+```
+
+解密
+```java
+Cipher cipher = Cipher.getInstance(this.cipherAlgorithm);
+cipher.init(Cipher.DECRYPT_MODE, key);
+byte[] encryptData = cipher.doFinal(data);
+```
 
 ### Java加解密实现
 
