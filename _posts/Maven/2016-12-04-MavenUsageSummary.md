@@ -1672,10 +1672,10 @@ Maven的依赖关系下载、插件下载、项目发布的仓库都是都是在
 
 \<mirrorOf/\>这里配置仓库的镜像，例如上面的central表示是中央仓库的镜像，*表示所有仓库镜像, \<mirrorOf/\>可以使用以下值
 
-* * = everything
-* external:* = everything not on the localhost and not file based.
-* repo,repo1 = repo or repo1
-* *,!repo1 = everything except repo1
+* \* = 表示所有仓库的镜像
+* external:* = 表示所有仓库的镜像但是排除本地仓库
+* repo,repo1 = 仓库repo,repo1的镜像
+* \*,!repo1 = 所有仓库镜像排除仓库repo1
 
 **使用多个mirror**
 
