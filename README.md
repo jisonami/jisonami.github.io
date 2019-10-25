@@ -4,6 +4,7 @@
 
 旧博客：[jisonami.iteye.com](http://jisonami.iteye.com)
 
+* 2018.9.19 入职深圳前海微众银行股份有限公司 Java开发工程师
 * 2016.7.1 正式入职QuarkFinance武汉IT部 Java开发工程师
 * 2016.6 毕业于中南财经政法大学武汉学院 信息与计算科学 本科
 * 2016.5.16-2016.6.30 QuarkFinance武汉IT部 Java开发工程师（实习生）
